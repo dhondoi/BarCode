@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>BarCode 1 Data 1 Result CRUD</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left">
+        <form id="form">
+          <label for="input">Masukkan Code</label>
+          <br /><br />
+          <textarea name="post" id="input" cols="30" rows="10"></textarea>
+          <br />
+          <br />
+          <button type="submit">Simpan</button>
+        </form>
+      </div>
+
+      <div class="right">
+        <div id="posts" style="display: flex; flex-wrap: wrap; justify-content: stretch">
+          <!-- it will show up after add -->
+        </div>
+      </div>
+    </div>
+    <script src="./jsbarcode.all.min.js"></script>
+
+    <script>
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const posts = document.getElementById("posts");
+      input.focus();
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        formValidation();
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          formValidation();
+        }
+      });
+
+      const isEnter = (e) => {
+        console.log(e.key);
+      };
+
+      const formValidation = () => {
+        if (input.value.trim() === "") {
+          alert("Data Tidak Boleh Kosong");
+        } else {
+          acceptData();
+        }
+      };
+
+      const data = {};
+
+      const acceptData = () => {
+        data["text"] = input.value;
+        createPost();
+      };
+
+      const createPost = () => {
+        posts.innerHTML += /*html*/ `
+        <div>
+          <div>
+            <img class="barcode" jsbarcode-value="${data.text}" data-value="${data.text}"/>
+            </div>
+          <span class="options">
+            <button onClick="editPost(this)">Ubah</button>
+            <button onClick="deletePost(this)">Hapus</button>
+          </span>
+        </div>
+        `;
+        JsBarcode(".barcode").init();
+        input.value = "";
+        input.focus();
+      };
+
+      const deletePost = (e) => {
+        e.parentElement.parentElement.remove();
+      };
+
+      const editPost = (e) => {
+        input.value = e.parentElement.previousElementSibling.firstElementChild.dataset.value;
+        e.parentElement.parentElement.remove();
+        input.focus();
+      };
+    </script>
+  </body>
+</html>

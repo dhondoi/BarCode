@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>BarCode 1 Data Multi Result</title>
+  </head>
+  <body>
+    <div class="options">
+      <label for="inCode">Masukkan Kode</label>
+      <input type="text" id="inCode" />
+      <label for="inTotal">Jumlah</label>
+      <input type="number" id="inTotal" />
+      <button id="btn">Buat</button>
+    </div>
+    <div id="divResult"></div>
+    <!-- <img class="barcode" /> -->
+
+    <script src="./jsbarcode.all.min.js"></script>
+    <script>
+      const inCode = document.getElementById("inCode");
+      const inTotal = document.getElementById("inTotal");
+      const btn = document.getElementById("btn");
+      const divResult = document.getElementById("divResult");
+
+      btn.addEventListener("click", generate);
+
+      function generate() {
+        let value = inCode.value.trim();
+        let total = inTotal.value.trim();
+        if (value == null || value == "" || total == null || total == "") {
+          alert("Data Kosong");
+        } else {
+          divResult.innerHTML = "";
+          let barcode = document.createElement("img");
+          barcode.classList.add("barcode");
+          for (let i = 0; i < total; i++) {
+            divResult.appendChild(barcode.cloneNode(true));
+          }
+          JsBarcode(".barcode", value);
+        }
+      }
+    </script>
+  </body>
+</html>
